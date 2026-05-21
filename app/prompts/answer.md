@@ -1,3 +1,6 @@
+Tax year in scope: {tax_year}.
+If the retrieved Publication is for a different tax year, say so plainly in the answer and recommend verifying the current-year Pub before acting.
+
 Retrieved context (from local IRS publication corpus):
 
 {retrieved_context}

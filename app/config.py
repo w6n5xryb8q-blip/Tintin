@@ -20,6 +20,7 @@ class Settings(BaseSettings):
     sqlite_path: Path = Path("./data/tintin.sqlite")
 
     snapshot_date: str = "2026-05-21"
+    default_tax_year: int = 2025
     allowed_hosts: str = "irs.gov,www.irs.gov,uscode.house.gov,www.ecfr.gov,ecfr.gov"
     daily_token_cap: int = 200_000
 

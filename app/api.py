@@ -22,6 +22,7 @@ _PROMPTS = Path(__file__).parent / "prompts"
 class AskIn(BaseModel):
     user_email: str
     question: str
+    tax_year: int | None = None
 
 
 class AskOut(BaseModel):
@@ -39,12 +40,39 @@ def _system_prompt() -> str:
     return (_PROMPTS / "system.md").read_text().replace("{{PUBLIC_NAME}}", settings.public_name)
 
 
-def _answer_prompt(retrieved_context: str, authority_candidates: str, user_block: str) -> str:
+def _answer_prompt(
+    retrieved_context: str, authority_candidates: str, user_block: str, tax_year: int
+) -> str:
     tmpl = (_PROMPTS / "answer.md").read_text()
     return tmpl.format(
         retrieved_context=retrieved_context,
         authority_candidates=authority_candidates,
         user_block=user_block,
+        tax_year=tax_year,
+    )
+
+
+def _tax_year_mismatch(chunks, tax_year: int) -> str | None:
+    """Return a note string if the top chunk's revision_date doesn't match the requested TY.
+
+    The ingest pipeline stamps "TYNNNN" for Pubs whose first page says
+    "For use in preparing NNNN Returns". Other revision-date formats
+    (e.g. "March 2024") get a pass — we can't compare them to a TY cleanly.
+    """
+    if not chunks:
+        return None
+    rev = (chunks[0].revision_date or "").strip()
+    if not rev.upper().startswith("TY"):
+        return None
+    try:
+        pub_ty = int(rev[2:])
+    except ValueError:
+        return None
+    if pub_ty == tax_year:
+        return None
+    return (
+        f"Top match is Pub {chunks[0].pub_number} for TY{pub_ty}, "
+        f"but you selected TY{tax_year}. Rules may have changed — verify before relying."
     )
 
 
@@ -161,8 +189,9 @@ def ask(body: AskIn) -> AskOut:
     authority_candidates = authority.format_authority_block(top_chain)
 
     # 5. LLM.
+    tax_year = body.tax_year or settings.default_tax_year
     user_block = sanitize_for_prompt(body.question)
-    prompt = _answer_prompt(retrieved_context, authority_candidates, user_block)
+    prompt = _answer_prompt(retrieved_context, authority_candidates, user_block, tax_year)
     provider = get_provider()
     resp = provider.complete(system=_system_prompt(), user=prompt, temperature=0.3)
     answer = resp.text
@@ -204,6 +233,9 @@ def ask(body: AskIn) -> AskOut:
     )
 
     notes = [w.detail for w in currency_warnings]
+    ty_note = _tax_year_mismatch(chunks, tax_year)
+    if ty_note:
+        notes.append(ty_note)
     if not r.passed:
         notes.append(f"readability still above target (grade {r.grade:.1f})")
 

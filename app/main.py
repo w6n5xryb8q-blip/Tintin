@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import streamlit as st
 
+from app.config import settings
 from app.ui.onboarding import render_cards
 from app.ui.strings import t
 
@@ -18,6 +19,13 @@ def main() -> None:
         return
 
     st.caption(t("data_disclosure"))
+    default_ty = settings.default_tax_year
+    tax_year = st.selectbox(
+        "Tax year",
+        options=[default_ty + 1, default_ty, default_ty - 1, default_ty - 2],
+        index=1,
+        help="Which tax year is the question about? The retrieved Pub revision is checked against this.",
+    )
     question = st.text_area(t("input_placeholder"), height=120)
     if st.button("Ask") and question.strip():
         with st.spinner("Thinking…"):
@@ -25,7 +33,11 @@ def main() -> None:
 
             r = httpx.post(
                 "http://127.0.0.1:8000/ask",
-                json={"user_email": st.session_state.get("user_email", "anonymous@example.com"), "question": question},
+                json={
+                    "user_email": st.session_state.get("user_email", "anonymous@example.com"),
+                    "question": question,
+                    "tax_year": int(tax_year),
+                },
                 timeout=120,
             )
             r.raise_for_status()
