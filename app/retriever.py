@@ -24,7 +24,50 @@ def _client():
     return chromadb.PersistentClient(path=str(settings.chroma_dir))
 
 
+class _StubEmbedder:
+    """Deterministic bag-of-words hash embedder. Offline-safe, no model download.
+
+    Quality is roughly token-overlap with TF damping — fine for smoke tests
+    against a small corpus, NOT for production retrieval. Gated by
+    settings.embedder = "stub".
+    """
+
+    DIM = 384  # matches all-MiniLM-L6-v2 dimensionality
+
+    @staticmethod
+    def _tokens(text: str) -> list[str]:
+        import re
+
+        return re.findall(r"[a-z0-9]+", text.lower())
+
+    def encode(self, texts, normalize_embeddings: bool = True):
+        import hashlib
+        import math
+
+        out = []
+        for t in texts:
+            vec = [0.0] * self.DIM
+            toks = self._tokens(t)
+            for tok in toks:
+                h = hashlib.blake2b(tok.encode(), digest_size=8).digest()
+                idx = int.from_bytes(h[:4], "big") % self.DIM
+                sign = 1.0 if h[4] & 1 else -1.0
+                vec[idx] += sign
+            if normalize_embeddings:
+                norm = math.sqrt(sum(v * v for v in vec)) or 1.0
+                vec = [v / norm for v in vec]
+            out.append(vec)
+
+        class _Arr(list):
+            def tolist(self):
+                return list(self)
+
+        return _Arr(out)
+
+
 def _embedder():
+    if settings.embedder == "stub":
+        return _StubEmbedder()
     from sentence_transformers import SentenceTransformer
 
     return SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")

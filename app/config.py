@@ -13,6 +13,10 @@ class Settings(BaseSettings):
     ollama_host: str = "http://localhost:11434"
     ollama_model: str = "llama3.1:8b-instruct"
 
+    # "sentence-transformers" (default, production) or "stub" (deterministic
+    # hash embedder for offline / network-restricted demos — POOR retrieval).
+    embedder: str = "sentence-transformers"
+
     public_name: str = "Tintin"
 
     corpus_dir: Path = Path("./corpus")
