@@ -1,0 +1,1 @@
+Write a one-sentence suggested next step for a tax professional receiving this escalation. Be specific about what to verify (e.g., "confirm the client qualifies as 'away from home' under Comm'r v. Flowers before deducting travel"). Do not give an opinion on the answer itself.

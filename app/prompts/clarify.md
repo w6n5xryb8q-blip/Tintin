@@ -1,0 +1,1 @@
+The admin's question is ambiguous in a way that materially changes the answer. Ask ONE short clarifying question (≤ 15 words). Pick the single fact whose value most changes the cited Publication or section. Do not ask more than one question at a time. If the ambiguity is between a federal-tax interpretation and a state-tax interpretation, do not ask — escalate instead.

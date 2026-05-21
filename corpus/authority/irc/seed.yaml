@@ -1,0 +1,55 @@
+# Seed IRC metadata. Stub for ingest of Title 26 sections most-cited by the
+# Pubs in v1 scope. Each entry: section, gist, latest_amendment (ISO date),
+# source_url. `latest_amendment` feeds authority.verify_authority_currency to
+# detect Pubs that pre-date a recent statutory change (e.g., TCJA sunsets,
+# Secure 2.0 phase-ins).
+
+- section: "62"
+  gist: "Adjusted gross income defined."
+  latest_amendment: "2017-12-22"
+  source_url: "https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title26-section62"
+
+- section: "67"
+  gist: "2% floor on miscellaneous itemized deductions; suspended through 2025 by TCJA."
+  latest_amendment: "2017-12-22"
+  source_url: "https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title26-section67"
+
+- section: "162"
+  gist: "Trade or business expenses — ordinary and necessary."
+  latest_amendment: "2020-12-27"
+  source_url: "https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title26-section162"
+
+- section: "199A"
+  gist: "Qualified Business Income deduction; scheduled to sunset 2025-12-31 absent extension."
+  latest_amendment: "2017-12-22"
+  source_url: "https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title26-section199A"
+
+- section: "213"
+  gist: "Medical, dental expense deduction; 7.5% AGI floor."
+  latest_amendment: "2020-12-27"
+  source_url: "https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title26-section213"
+
+- section: "219"
+  gist: "Retirement savings — IRA contribution deduction limits."
+  latest_amendment: "2022-12-29"  # SECURE 2.0
+  source_url: "https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title26-section219"
+
+- section: "274"
+  gist: "Disallowance of certain entertainment, travel, meals; strict substantiation."
+  latest_amendment: "2020-12-27"
+  source_url: "https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title26-section274"
+
+- section: "280A"
+  gist: "Business use of home; vacation home rules."
+  latest_amendment: "2017-12-22"
+  source_url: "https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title26-section280A"
+
+- section: "401"
+  gist: "Qualified pension, profit-sharing, and stock bonus plans."
+  latest_amendment: "2022-12-29"  # SECURE 2.0
+  source_url: "https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title26-section401"
+
+- section: "408"
+  gist: "Individual retirement accounts."
+  latest_amendment: "2022-12-29"  # SECURE 2.0 — RMD age, catch-ups
+  source_url: "https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title26-section408"

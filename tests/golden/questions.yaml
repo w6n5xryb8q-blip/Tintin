@@ -1,0 +1,62 @@
+# Golden-question eval set. Each item: question, gold_pub, gold_irc.
+# scripts/eval.py reports pub@2 accuracy and authority-chain match rate.
+
+- question: "What is the standard mileage rate for business use of a car this year?"
+  gold_pub: "463"
+  gold_irc: [162, 274]
+
+- question: "Can my client deduct unreimbursed travel between two job sites?"
+  gold_pub: "463"
+  gold_irc: [162]
+
+- question: "Is dental work for a dependent deductible as a medical expense?"
+  gold_pub: "502"
+  gold_irc: [213]
+
+- question: "What's the AGI floor for medical expense deduction?"
+  gold_pub: "502"
+  gold_irc: [213]
+
+- question: "Are daycare costs for a 4-year-old deductible while parents work?"
+  gold_pub: "503"
+  gold_irc: [21]
+
+- question: "How does an admin calculate estimated tax to avoid underpayment penalty?"
+  gold_pub: "505"
+  gold_irc: [6654]
+
+- question: "Is severance pay taxable income?"
+  gold_pub: "525"
+  gold_irc: [61]
+
+- question: "Is a personal injury settlement taxable?"
+  gold_pub: "525"
+  gold_irc: [104]
+
+- question: "What contribution limit applies to a traditional IRA this year?"
+  gold_pub: "590A"
+  gold_irc: [219, 408]
+
+- question: "When must required minimum distributions begin from an IRA?"
+  gold_pub: "590B"
+  gold_irc: [408]
+
+- question: "Does my client qualify for the Earned Income Credit with one child?"
+  gold_pub: "596"
+  gold_irc: [32]
+
+- question: "Can a parent claim the American Opportunity Credit for a freshman?"
+  gold_pub: "970"
+  gold_irc: ["25A"]
+
+- question: "What records do I need to prove a home office deduction?"
+  gold_pub: "587"
+  gold_irc: ["280A"]
+
+- question: "Is a meal during a same-day business trip deductible?"
+  gold_pub: "463"
+  gold_irc: [162, 274]
+
+- question: "Can a self-employed person deduct health insurance premiums?"
+  gold_pub: "535"
+  gold_irc: [162]

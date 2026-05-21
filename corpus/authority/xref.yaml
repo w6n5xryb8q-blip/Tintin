@@ -1,0 +1,104 @@
+# Pub → underlying authority cross-reference.
+# This is the source of truth that joins each IRS Publication citation to the
+# IRC sections, Treasury Regs, Revenue Rulings/Procs, and key case law it
+# summarizes. Curated by hand; expand as new Pubs are added to the corpus.
+#
+# Keys are normalized to "pub_<digits>". The Pub itself can be cited as
+# "Pub 17", "Publication 17", or "17" — app/authority.py normalizes.
+
+pub_17:                          # Your Federal Income Tax (Individuals)
+  irc: [1, 61, 62, 63, 151, 152]
+  regs: ["1.61-1", "1.62-1", "1.63-1"]
+  rulings: []
+  cases:
+    - {cite: "Commissioner v. Glenshaw Glass Co., 348 U.S. 426 (1955)", topic: "definition of gross income"}
+
+pub_463:                         # Travel, Gift, and Car Expenses
+  irc: [162, 274, "280F", 132]
+  regs: ["1.162-2", "1.274-5T", "1.274-5A"]
+  rulings: ["Rev. Proc. 2019-48"]
+  cases:
+    - {cite: "Cohan v. Commissioner, 39 F.2d 540 (2d Cir. 1930)", topic: "substantiation by estimation"}
+    - {cite: "Commissioner v. Flowers, 326 U.S. 465 (1946)", topic: "'away from home' requirement"}
+
+pub_502:                         # Medical and Dental Expenses
+  irc: [213]
+  regs: ["1.213-1"]
+  rulings: ["Rev. Rul. 2003-57"]
+  cases:
+    - {cite: "Commissioner v. Bilder, 369 U.S. 499 (1962)", topic: "lodging vs. medical care"}
+
+pub_503:                         # Child and Dependent Care Expenses
+  irc: [21, 129]
+  regs: ["1.21-1"]
+  rulings: []
+  cases: []
+
+pub_505:                         # Tax Withholding and Estimated Tax
+  irc: [3401, 6654]
+  regs: ["31.3401(a)-1", "1.6654-2"]
+  rulings: []
+  cases: []
+
+pub_525:                         # Taxable and Nontaxable Income
+  irc: [61, 104, 105, 119, 132]
+  regs: ["1.61-2", "1.104-1", "1.132-1"]
+  rulings: []
+  cases:
+    - {cite: "Commissioner v. Schleier, 515 U.S. 323 (1995)", topic: "§104(a)(2) damages exclusion"}
+
+pub_529:                         # Miscellaneous Deductions
+  irc: [67, 162, 212]
+  regs: ["1.67-1T"]
+  rulings: []
+  cases: []
+
+pub_535:                         # Business Expenses (historical; superseded for some topics)
+  irc: [162, 263, 263A, 195]
+  regs: ["1.162-1", "1.263(a)-1"]
+  rulings: []
+  cases:
+    - {cite: "Welch v. Helvering, 290 U.S. 111 (1933)", topic: "ordinary and necessary"}
+
+pub_590A:                        # Contributions to IRAs
+  irc: [219, 408]
+  regs: ["1.408-2"]
+  rulings: []
+  cases: []
+
+pub_590B:                        # Distributions from IRAs
+  irc: [72, 408, 4974]
+  regs: ["1.408-4"]
+  rulings: []
+  cases: []
+
+pub_596:                         # Earned Income Credit
+  irc: [32]
+  regs: ["1.32-2"]
+  rulings: []
+  cases: []
+
+pub_970:                         # Tax Benefits for Education
+  irc: [25, "25A", 117, 127, 221, 529, 530]
+  regs: ["1.25A-1", "1.25A-3", "1.25A-4"]
+  rulings: []
+  cases: []
+
+pub_972:                         # Child Tax Credit (historical)
+  irc: [24]
+  regs: ["1.24-1"]
+  rulings: []
+  cases: []
+
+pub_521:                         # Moving Expenses (post-TCJA: military only)
+  irc: [217, 132]
+  regs: ["1.217-2"]
+  rulings: []
+  cases: []
+
+pub_587:                         # Business Use of Your Home
+  irc: [280, "280A"]
+  regs: ["1.280A-2"]
+  rulings: []
+  cases:
+    - {cite: "Commissioner v. Soliman, 506 U.S. 168 (1993)", topic: "'principal place of business' test"}

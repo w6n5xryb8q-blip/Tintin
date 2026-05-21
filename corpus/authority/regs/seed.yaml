@@ -1,0 +1,28 @@
+# Seed Treasury Regulation metadata. Mirrors corpus/authority/irc/seed.yaml.
+# `reg_status` ∈ {final, temp, proposed}. Proposed regs are non-binding and
+# must be tagged as such in any rendered authority block.
+
+- reg: "1.162-2"
+  gist: "Trade or business expense — traveling expenses."
+  reg_status: "final"
+  latest_amendment: "1994-06-30"
+  source_url: "https://www.ecfr.gov/current/title-26/section-1.162-2"
+
+- reg: "1.274-5T"
+  gist: "Substantiation requirements (temporary)."
+  reg_status: "temp"
+  latest_amendment: "2003-08-19"
+  source_url: "https://www.ecfr.gov/current/title-26/section-1.274-5T"
+
+- reg: "1.213-1"
+  gist: "Medical, dental expenses — definition and limits."
+  reg_status: "final"
+  latest_amendment: "1979-05-23"
+  source_url: "https://www.ecfr.gov/current/title-26/section-1.213-1"
+
+- reg: "1.280A-2"
+  gist: "Business use of home — exclusive and regular use tests."
+  reg_status: "proposed"
+  latest_amendment: "1983-08-08"
+  source_url: "https://www.ecfr.gov/current/title-26/section-1.280A-2"
+  notes: "Proposed since 1983; not binding, but commonly relied on as IRS interpretive guidance."

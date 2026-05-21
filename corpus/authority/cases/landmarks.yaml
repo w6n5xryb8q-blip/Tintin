@@ -1,0 +1,63 @@
+# Hand-curated landmark and high-frequency case summaries. These are CITED in
+# answers and escalation briefs to give a reviewing tax pro the controlling
+# precedent — Tintin does NOT interpret them; the plain-language explanation
+# always comes from the IRS Publication.
+
+- cite: "Commissioner v. Glenshaw Glass Co., 348 U.S. 426 (1955)"
+  court: "U.S. Supreme Court"
+  topic: "gross income"
+  holding: "Income is any 'accession to wealth, clearly realized, over which the taxpayer has complete dominion.'"
+  precedential_scope: "binding nationwide"
+
+- cite: "Welch v. Helvering, 290 U.S. 111 (1933)"
+  court: "U.S. Supreme Court"
+  topic: "ordinary and necessary business expenses (§162)"
+  holding: "Defines 'ordinary' (common/accepted in the trade) and 'necessary' (appropriate and helpful)."
+  precedential_scope: "binding nationwide"
+
+- cite: "Cohan v. Commissioner, 39 F.2d 540 (2d Cir. 1930)"
+  court: "Second Circuit"
+  topic: "substantiation"
+  holding: "Courts may estimate deductible expenses when the taxpayer establishes some deduction is allowable but lacks exact records ('Cohan rule')."
+  precedential_scope: "binding in 2d Cir.; widely persuasive"
+  notes: "§274(d) overrides Cohan for travel, meals, gifts, listed property — strict substantiation required."
+
+- cite: "Commissioner v. Flowers, 326 U.S. 465 (1946)"
+  court: "U.S. Supreme Court"
+  topic: "travel 'away from home'"
+  holding: "Travel must be required by the business, not the taxpayer's personal choice of residence."
+  precedential_scope: "binding nationwide"
+
+- cite: "Commissioner v. Soliman, 506 U.S. 168 (1993)"
+  court: "U.S. Supreme Court"
+  topic: "home office — principal place of business"
+  holding: "Comparative analysis of relative importance of activities and time spent at each location."
+  precedential_scope: "binding nationwide"
+  notes: "Partially overridden by §280A(c)(1) flush language (1997)."
+
+- cite: "Commissioner v. Schleier, 515 U.S. 323 (1995)"
+  court: "U.S. Supreme Court"
+  topic: "§104(a)(2) personal injury damages"
+  holding: "Exclusion requires (1) tort or tort-type claim and (2) damages received on account of personal injury."
+  precedential_scope: "binding nationwide"
+
+- cite: "Gregory v. Helvering, 293 U.S. 465 (1935)"
+  court: "U.S. Supreme Court"
+  topic: "economic substance doctrine"
+  holding: "Transactions lacking business purpose beyond tax avoidance are disregarded; codified at §7701(o) in 2010."
+  precedential_scope: "binding nationwide"
+
+- cite: "Commissioner v. Bilder, 369 U.S. 499 (1962)"
+  court: "U.S. Supreme Court"
+  topic: "medical lodging deduction"
+  holding: "Lodging while away from home for medical care not deductible at the time; later partially overridden by §213(d)(2)."
+
+- cite: "Frank Lyon Co. v. United States, 435 U.S. 561 (1978)"
+  court: "U.S. Supreme Court"
+  topic: "form vs. substance — sale-leaseback"
+  holding: "Genuine multi-party transactions with economic substance and business purpose are respected as structured."
+
+- cite: "INDOPCO, Inc. v. Commissioner, 503 U.S. 79 (1992)"
+  court: "U.S. Supreme Court"
+  topic: "capitalization vs. current deduction"
+  holding: "Expenses producing significant future benefits must be capitalized, not deducted currently."

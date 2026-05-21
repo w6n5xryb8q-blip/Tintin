@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+.venv/
+.env
+data/
+corpus/irs_pubs/*.pdf
+!corpus/irs_pubs/.gitkeep
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+dist/
+build/
