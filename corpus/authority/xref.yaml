@@ -102,3 +102,25 @@ pub_587:                         # Business Use of Your Home
   rulings: []
   cases:
     - {cite: "Commissioner v. Soliman, 506 U.S. 168 (1993)", topic: "'principal place of business' test"}
+
+pub_334:                         # Tax Guide for Small Business
+  irc: [162, 163, 167, 168, 179, 263, 263A, 1401, 1402]
+  regs: ["1.162-1", "1.179-1", "1.263(a)-1"]
+  rulings: []
+  cases:
+    - {cite: "Welch v. Helvering, 290 U.S. 111 (1933)", topic: "ordinary and necessary"}
+    - {cite: "INDOPCO, Inc. v. Commissioner, 503 U.S. 79 (1992)", topic: "capitalization vs. current deduction"}
+
+pub_501:                         # Dependents, Standard Deduction, and Filing Information
+  irc: [2, 63, 151, 152, 7703]
+  regs: ["1.152-1", "1.152-2"]
+  rulings: []
+  cases: []
+  notes: "TCJA suspended the §151 personal exemption through 2025 — flag in answers."
+
+pub_936:                         # Home Mortgage Interest Deduction
+  irc: [163, 461]
+  regs: ["1.163-10T", "1.163-8T"]
+  rulings: ["Rev. Rul. 2010-25"]
+  cases: []
+  notes: "TCJA capped qualified-residence debt at $750k (post-12/15/2017) and suspended home-equity interest unless used to buy/build/improve the home."
