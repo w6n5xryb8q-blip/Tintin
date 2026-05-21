@@ -15,8 +15,8 @@ from pathlib import Path
 
 import httpx
 
-from app.verify import DisallowedHostError, _host_allowed
-from app.config import settings
+CORPUS_DIR = Path(__file__).resolve().parents[1] / "corpus"
+_ALLOWED_HOST = "www.irs.gov"
 
 # Core v1 corpus. Names match the xref keys (so "590A" stays distinct from "590B").
 PUBS = [
@@ -45,8 +45,9 @@ def pub_url(num: str) -> str:
 
 def download(num: str, dest_dir: Path) -> Path:
     url = pub_url(num)
-    if not _host_allowed(url):
-        raise DisallowedHostError(f"refusing non-allowlisted url: {url}")
+    from urllib.parse import urlparse
+    if urlparse(url).hostname != _ALLOWED_HOST:
+        raise ValueError(f"refusing non-irs.gov url: {url}")
     dest = dest_dir / f"p{num}.pdf"
     if dest.exists() and dest.stat().st_size > 0:
         print(f"  skip (already present): {dest.name}")
@@ -63,13 +64,13 @@ def download(num: str, dest_dir: Path) -> Path:
 
 def main(argv: list[str]) -> int:
     requested = argv[1:] if len(argv) > 1 else PUBS
-    dest_dir = settings.corpus_dir / "irs_pubs"
+    dest_dir = CORPUS_DIR / "irs_pubs"
     dest_dir.mkdir(parents=True, exist_ok=True)
     failures: list[str] = []
     for num in requested:
         try:
             download(num, dest_dir)
-        except (httpx.HTTPError, DisallowedHostError) as e:
+        except (httpx.HTTPError, ValueError) as e:
             failures.append(f"{num}: {e}")
             print(f"  ! failed {num}: {e}", file=sys.stderr)
     if failures:
