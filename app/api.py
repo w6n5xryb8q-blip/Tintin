@@ -136,32 +136,44 @@ def ask(body: AskIn) -> AskOut:
 
     # 2. Scope guard.
     scope = classify_scope(body.question)
+    scope_rescued_pub: str | None = None
     if scope.outcome is not ScopeOutcome.IN_SCOPE:
         # Retrieve anyway to attach Pubs/authority to the brief.
         chunks = retriever.query(body.question, k=4)
         _, pubs = _retrieved_to_context(chunks)
-        brief_id, rendered = _escalate(
-            user_email=body.user_email,
-            question_redacted=question_redacted,
-            reason=scope.reason,
-            pubs=pubs,
-        )
-        key = {
-            ScopeOutcome.STATE_TAX: "scope_state",
-            ScopeOutcome.RETURN_INTERPRETATION: "scope_return",
-        }.get(scope.outcome, "scope_offtopic")
-        return AskOut(
-            answer=None,
-            bucket=confidence.Bucket.ESCALATE.value,
-            reason=scope.reason,
-            pubs=pubs,
-            authority_block=authority.format_authority_block(
-                authority.attach_authority(pubs[0]) if pubs else authority.AuthorityChain("")
-            ),
-            escalated=True,
-            brief=rendered,
-            notes=[t(key)],
-        )
+
+        # Retrieval-rescue: only OFF_TOPIC false-negatives get rescued.
+        # STATE_TAX / RETURN_INTERPRETATION / INTERNATIONAL / PRIOR_YEAR
+        # are deliberate refusals — strong retrieval doesn't override them.
+        if (
+            scope.outcome is ScopeOutcome.OFF_TOPIC
+            and chunks
+            and chunks[0].score >= settings.scope_rescue_min_score
+        ):
+            scope_rescued_pub = chunks[0].pub_number or ""
+        else:
+            brief_id, rendered = _escalate(
+                user_email=body.user_email,
+                question_redacted=question_redacted,
+                reason=scope.reason,
+                pubs=pubs,
+            )
+            key = {
+                ScopeOutcome.STATE_TAX: "scope_state",
+                ScopeOutcome.RETURN_INTERPRETATION: "scope_return",
+            }.get(scope.outcome, "scope_offtopic")
+            return AskOut(
+                answer=None,
+                bucket=confidence.Bucket.ESCALATE.value,
+                reason=scope.reason,
+                pubs=pubs,
+                authority_block=authority.format_authority_block(
+                    authority.attach_authority(pubs[0]) if pubs else authority.AuthorityChain("")
+                ),
+                escalated=True,
+                brief=rendered,
+                notes=[t(key)],
+            )
 
     # 3. Retrieve.
     chunks = retriever.query(body.question, k=6)
@@ -238,6 +250,18 @@ def ask(body: AskIn) -> AskOut:
         notes.append(ty_note)
     if not r.passed:
         notes.append(f"readability still above target (grade {r.grade:.1f})")
+
+    if scope_rescued_pub is not None:
+        # Cap confidence — the scope guard's false-negative is itself a
+        # signal that the question was phrased ambiguously.
+        if bucket is confidence.Bucket.SOLID or bucket is confidence.Bucket.MOSTLY_SOLID:
+            bucket = confidence.Bucket.USE_WITH_CAUTION
+            reason = "scope guard initially flagged this as off-topic"
+        notes.insert(
+            0,
+            f"Scope guard initially flagged this as off-topic, but retrieval "
+            f"found a strong match in Pub {scope_rescued_pub}. Verify before relying.",
+        )
 
     return AskOut(
         answer=answer,

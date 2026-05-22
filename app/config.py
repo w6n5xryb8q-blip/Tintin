@@ -17,6 +17,12 @@ class Settings(BaseSettings):
     # hash embedder for offline / network-restricted demos — POOR retrieval).
     embedder: str = "sentence-transformers"
 
+    # Retrieval-rescue floor: if the rules-layer scope guard says OFF_TOPIC
+    # but the top retrieved chunk's similarity exceeds this, treat the
+    # question as in-scope and cap confidence at "Use with caution". Tune
+    # per embedder — 0.5+ for sentence-transformers, ~0.15 for the stub.
+    scope_rescue_min_score: float = 0.15
+
     public_name: str = "Tintin"
 
     corpus_dir: Path = Path("./corpus")

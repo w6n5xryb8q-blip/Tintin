@@ -50,12 +50,30 @@ _INTL_RE = re.compile(
     re.IGNORECASE,
 )
 _INTL_ALLOWED_RE = re.compile(r"\b(FEIE|foreign earned income|ITIN|W-?7)\b", re.IGNORECASE)
+# Stems allow suffixes (deduct → deduct, deduction, deductible, deducting).
+# Stems use a leading \b but no trailing one. Be careful adding short stems:
+# "tax" matches "taxable" and "taxpayer" (intended) but would also match
+# "taxonomy" — accepted as a benign false-positive.
+_TAX_STEMS = (
+    "tax|deduct|credit|withhold|exempt|fil(?:e|ing|ed)|"
+    "depreciat|amortiz|capital gain|dividend|"
+    "itemiz|standard deduction|substantiat|reimburs|"
+    "estimated payment|estimated tax|depend(?:ent|ant)|exemption|distribution|"
+    # Everyday taxpayer phrasings.
+    "claim|expense|write[-\\s]?off|gig|rideshare|side hustle|side gig|"
+    "freelance|self.?employ|independent contractor|home office|"
+    "business mile|business meal"
+)
+
+# Exact tokens — require full word boundary so "1040" doesn't match "10401".
+_TAX_EXACT = (
+    "IRS|1040|1099|W-?2|W-?7|IRA|401\\(?k\\)?|HSA|FSA|EITC|AOTC|LLC|"
+    "ITIN|FEIE|RMD|publication|pub\\.?\\s*\\d|mileage|return|"
+    "child tax credit"
+)
+
 _TAX_TOPIC_RE = re.compile(
-    r"\b(tax|IRS|deduct|credit|withhold|exempt|filing|return|1040|1099|W-?2|W-?7|"
-    r"depreciation|amortization|capital gain|dividend|IRA|401\(?k\)?|HSA|"
-    r"FSA|EITC|child tax credit|AOTC|LLC|standard deduction|itemized|"
-    r"publication|pub\.?\s*\d|mileage|substantiation|reimburs|ITIN|FEIE|"
-    r"estimated payment|estimated tax|dependent|exemption|RMD|distribution)\b",
+    rf"\b(?:(?:{_TAX_STEMS})\w*|(?:{_TAX_EXACT})\b)",
     re.IGNORECASE,
 )
 

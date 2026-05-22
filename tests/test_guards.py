@@ -61,3 +61,29 @@ def test_scope_off_topic_blocked():
 def test_scope_intl_allowlist():
     d = classify_scope("How do I apply for an ITIN using Form W-7?")
     assert d.outcome is ScopeOutcome.IN_SCOPE
+
+
+def test_scope_everyday_phrasings_pass():
+    """Regression: 'Could I claim my Uber expenses?' and similar plain-English
+    tax questions were incorrectly bucketed as OFF_TOPIC because the keyword
+    regex required professional terms like 'deduct' and had a trailing \\b
+    that prevented stem matches (so 'deduction' didn't match 'deduct')."""
+    for q in [
+        "Could I claim my Uber expenses?",
+        "Mortgage interest deduction limit",
+        "Can I write off my home office?",
+        "How do I report gig income?",
+        "What expenses can I claim as a freelancer?",
+        "Are my medical bills deductible?",
+        "Is my employer withholding the right amount?",
+    ]:
+        assert classify_scope(q).outcome is ScopeOutcome.IN_SCOPE, q
+
+
+def test_scope_off_topic_still_blocks_non_tax():
+    for q in [
+        "what is the weather in manila tomorrow?",
+        "recommend a good restaurant",
+        "is python better than javascript",
+    ]:
+        assert classify_scope(q).outcome is ScopeOutcome.OFF_TOPIC, q
