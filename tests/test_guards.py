@@ -17,6 +17,37 @@ def test_pii_redact_replaces_in_place():
     assert "[REDACTED-SSN]" in out
 
 
+def test_pii_redacts_ssn_shaped_strings_even_when_not_a_valid_ssa_issue():
+    """Regression: the demo question 'My SSN is 400-00-6001' leaked through
+    the regex because the original pattern excluded group 00, area 000/666,
+    area 9XX, and serial 0000 as 'conservative exclusions'. A PII guard must
+    optimize for recall — anything shaped like an SSN gets redacted, even if
+    the SSA would never issue that exact number."""
+    cases = [
+        "My SSN is 400-00-6001",  # demo case — group 00
+        "SSN 000-12-3456",  # area 000
+        "SSN 666-12-3456",  # area 666 (reserved)
+        "SSN 123-45-0000",  # serial 0000
+    ]
+    for text in cases:
+        out = redact(text)
+        # Whatever kind it was classified as (ssn / itin), the literal
+        # digits must not survive.
+        digits = "".join(c for c in text if c.isdigit())
+        assert digits not in out, f"PII leaked: {text!r} → {out!r}"
+        assert "REDACTED" in out, f"no redaction marker for {text!r}"
+
+
+def test_pii_itin_classified_before_ssn():
+    """With validity exclusions removed, the relaxed SSN pattern would also
+    match the 9XX-XX-XXXX shape used by ITINs. _PATTERNS runs ITIN first so
+    the more specific kind wins classification (both still get redacted)."""
+    findings = detect_pii("client ITIN 912-70-1234")
+    kinds = [f.kind for f in findings]
+    assert "itin" in kinds
+    assert "ssn" not in kinds
+
+
 def test_pii_does_not_flag_innocuous_dates():
     assert detect_pii("filed on 04-15-2024 with refund 1200") == [] or all(
         f.kind == "bank_account" for f in detect_pii("filed on 04-15-2024 with refund 1200")
