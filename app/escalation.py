@@ -17,6 +17,13 @@ class EscalationBrief:
     retrieved_pubs: list[str]
     authority: AuthorityChain | None
     suggested_next_step: str
+    pii_kinds_redacted: tuple[str, ...] = ()
+
+    def _question_header(self) -> str:
+        if not self.pii_kinds_redacted:
+            return "Question:"
+        kinds = ", ".join(sorted(k.upper() for k in self.pii_kinds_redacted))
+        return f"Question (redacted: {kinds}):"
 
     def render(self) -> str:
         pubs = ", ".join(self.retrieved_pubs) if self.retrieved_pubs else "(none)"
@@ -24,7 +31,7 @@ class EscalationBrief:
         return (
             "Tax-pro escalation brief\n"
             "------------------------\n"
-            f"Question (PII redacted):\n  {self.question_redacted}\n\n"
+            f"{self._question_header()}\n  {self.question_redacted}\n\n"
             f"Why this was escalated:\n  {self.scope_reason}\n\n"
             f"What was found:\n  Pubs touched: {pubs}\n\n"
             f"Likely controlling authority:\n  {auth}\n\n"
@@ -62,6 +69,7 @@ def build_brief(
     retrieved_pubs: list[str],
     authority: AuthorityChain | None,
     suggested_next_step: str,
+    pii_kinds_redacted: tuple[str, ...] = (),
 ) -> EscalationBrief:
     return EscalationBrief(
         id=str(uuid.uuid4()),
@@ -70,6 +78,7 @@ def build_brief(
         retrieved_pubs=retrieved_pubs,
         authority=authority,
         suggested_next_step=suggested_next_step,
+        pii_kinds_redacted=pii_kinds_redacted,
     )
 
 

@@ -90,7 +90,12 @@ def _retrieved_to_context(chunks) -> tuple[str, list[str]]:
 
 
 def _escalate(
-    *, user_email: str, question_redacted: str, reason: str, pubs: list[str]
+    *,
+    user_email: str,
+    question_redacted: str,
+    reason: str,
+    pubs: list[str],
+    pii_kinds_redacted: tuple[str, ...] = (),
 ) -> tuple[str, str]:
     chain = authority.attach_authority(pubs[0]) if pubs else None
     brief = escalation.build_brief(
@@ -99,6 +104,7 @@ def _escalate(
         retrieved_pubs=pubs,
         authority=chain,
         suggested_next_step="Verify the controlling authority above against the client's facts.",
+        pii_kinds_redacted=pii_kinds_redacted,
     )
     escalation.store(brief)
     log_turn(
@@ -133,6 +139,7 @@ def ask(body: AskIn) -> AskOut:
         )
 
     question_redacted = redact(body.question, findings)
+    pii_kinds_redacted = tuple(sorted({f.kind for f in findings}))
 
     # 2. Scope guard.
     scope = classify_scope(body.question)
@@ -157,6 +164,7 @@ def ask(body: AskIn) -> AskOut:
                 question_redacted=question_redacted,
                 reason=scope.reason,
                 pubs=pubs,
+                pii_kinds_redacted=pii_kinds_redacted,
             )
             key = {
                 ScopeOutcome.STATE_TAX: "scope_state",
@@ -184,6 +192,7 @@ def ask(body: AskIn) -> AskOut:
             question_redacted=question_redacted,
             reason="retrieval returned no matches",
             pubs=[],
+            pii_kinds_redacted=pii_kinds_redacted,
         )
         return AskOut(
             answer=None,

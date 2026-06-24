@@ -32,6 +32,37 @@ def test_brief_renders_with_authority_chain():
     assert "suggested next step" in rendered.lower()
 
 
+def test_brief_header_omits_redaction_claim_when_no_pii_found():
+    """Regression: header used to hard-code 'Question (PII redacted)' even when
+    the regex hadn't actually redacted anything — a misleading label that
+    would give reviewers false confidence. Now it claims redaction only when
+    the caller passes the kinds that were actually redacted."""
+    brief = escalation.build_brief(
+        question_redacted="plain text question",
+        scope_reason="reason",
+        retrieved_pubs=[],
+        authority=None,
+        suggested_next_step="step",
+    )
+    rendered = brief.render()
+    assert "Question:" in rendered
+    assert "PII redacted" not in rendered
+    assert "redacted:" not in rendered
+
+
+def test_brief_header_lists_redacted_kinds_when_present():
+    brief = escalation.build_brief(
+        question_redacted="My SSN is [REDACTED-SSN]",
+        scope_reason="reason",
+        retrieved_pubs=[],
+        authority=None,
+        suggested_next_step="step",
+        pii_kinds_redacted=("ssn", "ein"),
+    )
+    rendered = brief.render()
+    assert "Question (redacted: EIN, SSN):" in rendered
+
+
 def test_brief_stored_to_sqlite(tmp_db: Path):
     brief = escalation.build_brief(
         question_redacted="q",
